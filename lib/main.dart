@@ -1,5 +1,4 @@
-import 'package:attendance_project/view/auth/login.dart';
-import 'package:attendance_project/view/auth/register.dart';
+import 'package:attendance_project/navigator/bottom_nav.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -32,7 +31,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: RegisterPage()
+      home: BottomNavigator(),
     );
   }
 }
