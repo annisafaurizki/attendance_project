@@ -65,6 +65,7 @@ flutter:
   assets:
     - assets/images/slideremovebg.png
     - assets/images/catprofile.jpg
+    - assets/images/maps.png
     
   #   - images/a_dot_ham.jpeg
 

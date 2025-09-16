@@ -1,7 +1,7 @@
 import 'package:attendance_project/extension/navigator.dart';
 import 'package:attendance_project/utils/app_color.dart';
 import 'package:attendance_project/view/auth/register.dart';
-import 'package:attendance_project/view/home/halaman_utama.dart';
+import 'package:attendance_project/view/widget/absen_halaman.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                     backgroundColor: AttendanceColors.button,
                   ),
                   onPressed: () {
-                    context.push(FirstPage());
+                    context.push(AbsenHalaman());
                   },
                   child: Text("Sign In", style: TextStyle(color: Colors.white)),
                 ),

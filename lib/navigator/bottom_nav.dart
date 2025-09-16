@@ -1,5 +1,7 @@
 import 'package:attendance_project/navigator/flashy_tab_bar.dart';
-import 'package:attendance_project/view/home/halaman_utama.dart';
+import 'package:attendance_project/view/widget/absen_halaman.dart';
+import 'package:attendance_project/view/widget/halaman_utama.dart';
+import 'package:attendance_project/view/widget/profile.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigator extends StatefulWidget {
@@ -12,7 +14,11 @@ class BottomNavigator extends StatefulWidget {
 class _BottomNavigatorState extends State<BottomNavigator> {
   int _selectedIndex = 0;
 
-  final List<Widget> _listWidget = const [FirstPage()];
+  final List<Widget> _listWidget = const [
+    AbsenHalaman(),
+    FirstPage(),
+    ProfilePage(),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -31,8 +37,12 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           _selectedIndex = index;
         }),
         items: [
-          FlashyTabBarItem(icon: Icon(Icons.home), title: Text('Dashboard')),
-          FlashyTabBarItem(icon: Icon(Icons.event), title: Text('Event')),
+          FlashyTabBarItem(
+            icon: Icon(Icons.calendar_month),
+            title: Text('Attendance'),
+          ),
+          FlashyTabBarItem(icon: Icon(Icons.home), title: Text('Home')),
+          FlashyTabBarItem(icon: Icon(Icons.person), title: Text('Account')),
         ],
       ),
     );
