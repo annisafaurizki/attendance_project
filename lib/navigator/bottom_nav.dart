@@ -1,4 +1,5 @@
 import 'package:attendance_project/navigator/flashy_tab_bar.dart';
+import 'package:attendance_project/view/maps/maps.dart';
 import 'package:attendance_project/view/widget/absen_halaman.dart';
 import 'package:attendance_project/view/widget/halaman_utama.dart';
 import 'package:attendance_project/view/widget/profile.dart';
@@ -18,6 +19,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     AbsenHalaman(),
     FirstPage(),
     ProfilePage(),
+    GoogleMapsScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -43,6 +45,10 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           ),
           FlashyTabBarItem(icon: Icon(Icons.home), title: Text('Home')),
           FlashyTabBarItem(icon: Icon(Icons.person), title: Text('Account')),
+          FlashyTabBarItem(
+            icon: Icon(Icons.maps_home_work),
+            title: Text('Maps'),
+          ),
         ],
       ),
     );
