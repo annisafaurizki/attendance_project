@@ -1,6 +1,5 @@
 import 'package:attendance_project/navigator/flashy_tab_bar.dart';
 import 'package:attendance_project/view/maps/maps.dart';
-import 'package:attendance_project/view/widget/absen_halaman.dart';
 import 'package:attendance_project/view/widget/halaman_utama.dart';
 import 'package:attendance_project/view/widget/profile.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +15,8 @@ class _BottomNavigatorState extends State<BottomNavigator> {
   int _selectedIndex = 0;
 
   final List<Widget> _listWidget = const [
-    AbsenHalaman(),
-    FirstPage(),
     ProfilePage(),
+    FirstPage(),
     GoogleMapsScreen(),
   ];
 
@@ -39,12 +37,8 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           _selectedIndex = index;
         }),
         items: [
-          FlashyTabBarItem(
-            icon: Icon(Icons.calendar_month),
-            title: Text('Attendance'),
-          ),
-          FlashyTabBarItem(icon: Icon(Icons.home), title: Text('Home')),
           FlashyTabBarItem(icon: Icon(Icons.person), title: Text('Account')),
+          FlashyTabBarItem(icon: Icon(Icons.home), title: Text('Home')),
           FlashyTabBarItem(
             icon: Icon(Icons.maps_home_work),
             title: Text('Maps'),

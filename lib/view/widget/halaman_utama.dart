@@ -1,5 +1,4 @@
 import 'package:attendance_project/utils/app_color.dart';
-import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 
 class FirstPage extends StatefulWidget {
@@ -125,38 +124,38 @@ class _FirstPageState extends State<FirstPage> {
             //     );
             //   },
             // ),
-            Theme(
-              data: Theme.of(context).copyWith(
-                colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
-              ),
-              child: Builder(
-                builder: (context) {
-                  return EasyTheme(
-                    data: EasyTheme.of(context).copyWithState(
-                      selectedDayTheme: const DayThemeData(
-                        backgroundColor: AttendanceColors.button,
-                      ),
-                      unselectedDayTheme: const DayThemeData(
-                        backgroundColor: AttendanceColors.pastelgrey,
-                      ),
-                      disabledDayTheme: DayThemeData(
-                        backgroundColor: Colors.grey.shade100,
-                      ),
-                    ),
-                    child: EasyDateTimeLinePicker(
-                      focusedDate: _selectedDate,
-                      firstDate: DateTime(2024, 11, 15),
-                      lastDate: DateTime(2030, 3, 18),
-                      onDateChange: (date) {
-                        setState(() {
-                          _selectedDate = date;
-                        });
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
+            // Theme(
+            //   data: Theme.of(context).copyWith(
+            //     colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+            //   ),
+            //   child: Builder(
+            //     builder: (context) {
+            //       return EasyTheme(
+            //         data: EasyTheme.of(context).copyWithState(
+            //           selectedDayTheme: const DayThemeData(
+            //             backgroundColor: AttendanceColors.button,
+            //           ),
+            //           unselectedDayTheme: const DayThemeData(
+            //             backgroundColor: AttendanceColors.pastelgrey,
+            //           ),
+            //           disabledDayTheme: DayThemeData(
+            //             backgroundColor: Colors.grey.shade100,
+            //           ),
+            //         ),
+            //         child: EasyDateTimeLinePicker(
+            //           focusedDate: _selectedDate,
+            //           firstDate: DateTime(2024, 11, 15),
+            //           lastDate: DateTime(2030, 3, 18),
+            //           onDateChange: (date) {
+            //             setState(() {
+            //               _selectedDate = date;
+            //             });
+            //           },
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
             SizedBox(height: 30),
             Row(
               children: [
