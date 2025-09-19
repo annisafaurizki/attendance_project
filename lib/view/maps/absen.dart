@@ -1,6 +1,9 @@
 import 'dart:math';
 
 import 'package:action_slider/action_slider.dart';
+import 'package:attendance_project/api/absen_check_in_service.dart';
+import 'package:attendance_project/model/absen_keluar_model.dart';
+import 'package:attendance_project/model/absen_model.dart';
 import 'package:attendance_project/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -16,7 +19,7 @@ class GoogleMapsScreen extends StatefulWidget {
 
 class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
   GoogleMapController? mapController;
-  LatLng _currentPosition = LatLng(-6.200000, 106.816666); // Default to Jakarta
+  LatLng _currentPosition = LatLng(-6.200000, 106.816666); // Default Jakarta
   String _currentAddress = "Alamat tidak ditemukan";
   Marker? _marker;
 
@@ -53,8 +56,10 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                boxShadow: [
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black26,
                     blurRadius: 10,
@@ -71,14 +76,14 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           "Location",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
                           _currentAddress,
                           style: TextStyle(color: Colors.grey[700]),
@@ -91,7 +96,7 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
                   /// Punch In & Punch Out
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    children: const [
                       Column(
                         children: [
                           Text("Check In"),
@@ -122,6 +127,7 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
                   ),
                   const SizedBox(height: 16),
 
+                  /// Slider Action
                   ActionSlider.dual(
                     backgroundBorderRadius: BorderRadius.circular(10.0),
                     foregroundBorderRadius: BorderRadius.circular(10.0),
@@ -139,19 +145,31 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
                         ),
                       ),
                     ),
+
+                    /// 👉 Check Out
                     startAction: (controller) async {
-                      controller.loading(); //starts loading animation
-                      await Future.delayed(const Duration(seconds: 3));
-                      controller.success(); //starts success animation
+                      controller.loading();
+                      try {
+                        await _absenCheckOut(); // ✅ panggil API checkout
+                        controller.success();
+                      } catch (e) {
+                        controller.failure();
+                      }
                       await Future.delayed(const Duration(seconds: 1));
-                      controller.reset(); //resets the slider
+                      controller.reset();
                     },
+
+                    /// 👉 Check In
                     endAction: (controller) async {
-                      controller.loading(); //starts loading animation
-                      await Future.delayed(const Duration(seconds: 3));
-                      controller.success(); //starts success animation
+                      controller.loading();
+                      try {
+                        await _absenCheckIn(); // ✅ panggil API checkin
+                        controller.success();
+                      } catch (e) {
+                        controller.failure();
+                      }
                       await Future.delayed(const Duration(seconds: 1));
-                      controller.reset(); //resets the slider
+                      controller.reset();
                     },
                   ),
                 ],
@@ -163,6 +181,7 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
     );
   }
 
+  /// Fungsi ambil lokasi + marker
   Future<void> _getCurrentLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -193,7 +212,7 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
     setState(() {
       _currentPosition = LatLng(position.latitude, position.longitude);
       _marker = Marker(
-        markerId: MarkerId("lokasi_saya"),
+        markerId: const MarkerId("lokasi_saya"),
         position: _currentPosition,
         infoWindow: InfoWindow(
           title: 'Lokasi Anda',
@@ -210,5 +229,103 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
         ),
       );
     });
+  }
+
+  /// Fungsi check in API
+  Future<void> _absenCheckIn() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      String address = "Alamat tidak ditemukan";
+      String locationName = "Lokasi Tidak Diketahui";
+
+      if (placemarks.isNotEmpty) {
+        final place = placemarks.first;
+        address =
+            "${place.street}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+        locationName = place.locality ?? "Lokasi Tidak Diketahui";
+      }
+
+      AbsenCheckInModel? result = await AttendanceAPI.checkInUser(
+        checkInLat: position.latitude,
+        checkInLng: position.longitude,
+        checkInLocation: locationName,
+        checkInAddress: address,
+      );
+
+      if (!mounted) return;
+
+      if (result != null && result.data != null) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("✅ ${result.message}")));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("⚠️ ${result?.message ?? "Sudah absen hari ini"}"),
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+    }
+  }
+
+  /// Fungsi check out API
+  Future<void> _absenCheckOut() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      String address = "Alamat tidak ditemukan";
+      String locationName = "Lokasi Tidak Diketahui";
+
+      if (placemarks.isNotEmpty) {
+        final place = placemarks.first;
+        address =
+            "${place.street}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+        locationName = place.locality ?? "Lokasi Tidak Diketahui";
+      }
+
+      AbsenCheckOutModels result = await AttendanceAPI.checkOut(
+        checkOutLat: position.latitude,
+        checkOutLng: position.longitude,
+        checkOutLocation: locationName,
+        checkOutAddress: address,
+      );
+
+      if (!mounted) return;
+
+      if (result.data != null) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("✅ ${result.message}")));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("⚠️ ${result.message ?? "Gagal check-out"}")),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+    }
   }
 }

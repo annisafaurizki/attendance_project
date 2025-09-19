@@ -11,20 +11,20 @@ String profileModelToJson(GetProfileModel data) => json.encode(data.toJson());
 
 class GetProfileModel {
   String message;
-  Data data;
+  Profile data;
 
   GetProfileModel({required this.message, required this.data});
 
   factory GetProfileModel.fromJson(Map<String, dynamic> json) =>
       GetProfileModel(
         message: json["message"],
-        data: Data.fromJson(json["data"]),
+        data: Profile.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {"message": message, "data": data.toJson()};
 }
 
-class Data {
+class Profile {
   int id;
   String name;
   String email;
@@ -36,7 +36,7 @@ class Data {
   String profilePhoto;
   String profilePhotoUrl;
 
-  Data({
+  Profile({
     required this.id,
     required this.name,
     required this.email,
@@ -49,7 +49,7 @@ class Data {
     required this.profilePhotoUrl,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
     id: json["id"],
     name: json["name"],
     email: json["email"],

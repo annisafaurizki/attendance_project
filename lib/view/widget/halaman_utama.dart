@@ -1,3 +1,5 @@
+import 'package:attendance_project/api/history_service.dart';
+import 'package:attendance_project/model/history_model.dart';
 import 'package:attendance_project/utils/app_color.dart';
 import 'package:flutter/material.dart';
 
@@ -9,9 +11,9 @@ class FirstPage extends StatefulWidget {
 }
 
 class _FirstPageState extends State<FirstPage> {
-  final TextEditingController bulanController = TextEditingController();
-  List<Map<String, dynamic>> listBulan = [];
-  String? pilihBulan;
+  // final TextEditingController bulanController = TextEditingController();
+  // List<Map<String, dynamic>> listBulan = [];
+  // String? pilihBulan;
   DateTime? _selectedDate;
   bool isLoading = true;
 
@@ -200,6 +202,82 @@ class _FirstPageState extends State<FirstPage> {
               ],
             ),
             SizedBox(height: 15),
+            FutureBuilder<GetHistoryModel>(
+              future: HistoryAPI.getHistory(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.hasError) {
+                  return Center(child: Text("❌ Error: ${snapshot.error}"));
+                }
+
+                if (!snapshot.hasData || snapshot.data!.data!.isEmpty) {
+                  return const Center(child: Text("Belum ada riwayat booking"));
+                }
+
+                // filter status = cancelled
+                final bookings = snapshot.data!.data!;
+
+                if (bookings.isEmpty) {
+                  return const Center(child: Text("Belum ada riwayat booking"));
+                }
+
+                return ListView.separated(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.all(16),
+                  itemCount: bookings.length,
+                  separatorBuilder: (_, __) => const Divider(),
+                  itemBuilder: (context, index) {
+                    final history = bookings[index];
+
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 2,
+                      child: ListTile(
+                        // leading: ClipRRect(
+                        //   borderRadius: BorderRadius.circular(8),
+                        //   child: Image.network(
+                        //     service.servicePhotoUrl,
+                        //     width: 50,
+                        //     height: 50,
+                        //     fit: BoxFit.cover,
+                        //     errorBuilder: (_, __, ___) =>
+                        //         const Icon(Icons.image_not_supported),
+                        //   ),
+                        // ),
+                        title: Text(
+                          history.status ?? '',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        // subtitle: Column(
+                        //   crossAxisAlignment: CrossAxisAlignment.start,
+                        //   children: [
+                        //     Text(
+                        //       "Dipesan: ${DateFormat('dd MMM yyyy, HH:mm').format(booking.bookingTime)}",
+                        //     ),
+                        //     Text("Status: ${booking.status}"),
+                        //   ],
+                        // ),
+                        // trailing: Text(
+                        //   "Rp ${service.price}",
+                        //   style: const TextStyle(
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Colors.red,
+                        //   ),
+                        // ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
