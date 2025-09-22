@@ -102,7 +102,7 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
                           Text("Check In"),
                           SizedBox(height: 4),
                           Text(
-                            "10:07 AM",
+                            "10:07",
                             style: TextStyle(
                               color: Colors.green,
                               fontWeight: FontWeight.bold,
@@ -115,7 +115,7 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
                           Text("Check Out"),
                           SizedBox(height: 4),
                           Text(
-                            "--:--",
+                            "17:00",
                             style: TextStyle(
                               color: Colors.redAccent,
                               fontWeight: FontWeight.bold,
