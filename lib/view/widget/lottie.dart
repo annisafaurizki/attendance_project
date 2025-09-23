@@ -6,6 +6,7 @@ Future<void> showLottieDialog({
   required String asset,
   required String message,
   required VoidCallback onClose,
+   bool autoClose = true,
 }) async {
   await showDialog(
     context: context,

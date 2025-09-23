@@ -12,4 +12,5 @@ class Endpoint {
   static const String izin = "$baseUrl/izin";
   static const String otp = "$baseUrl/forgot-password";
   static const String reset = "$baseUrl/reset-password";
+  static const String photo = "$baseUrl/profile/photo";
 }

@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+   const LoginPage({super.key});
   static const id = "/login";
 
   @override
@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding:  EdgeInsets.all(20.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -66,11 +66,11 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                 ),
-                const SizedBox(height: 12),
+                 SizedBox(height: 12),
                 Text(
                   message,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style:  TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
 
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding:  EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -163,11 +163,10 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   width: double.infinity,
                   height: 250,
-                  child: Image.asset("assets/images/logoSlide2.png"),
+                  child: Image.asset("assets/images/logoRemove.png"),
                 ),
-                Text("Hi! Welcome back, you've been missed"),
-                SizedBox(height: 20),
-                Text("Email"),
+                
+                
                 TextField(
                   controller: emailController,
                   decoration: InputDecoration(
@@ -182,12 +181,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 SizedBox(height: 20),
-                Text("Password"),
+                
                 TextField(
                   controller: passwordController,
                   obscureText: !isVisibility,
                   decoration: InputDecoration(
-                    hintText: "Password",
+                    hintText: "Kata sandi",
                     filled: true,
                     fillColor: AttendanceColors.pastelgrey,
                     border: OutlineInputBorder(
@@ -206,13 +205,16 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    context.push(ForgotResetPasswordPage());
-                  },
-                  child: Text(
-                    "Forgot Password?",
-                    style: TextStyle(fontWeight: FontWeight.w900),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      context.push(ForgotResetPasswordPage());
+                    },
+                    child: Text(
+                      "Lupa Kata sandi?",
+                      style: TextStyle(fontWeight: FontWeight.w900),
+                    ),
                   ),
                 ),
                 SizedBox(height: 30),
@@ -221,13 +223,13 @@ class _LoginPageState extends State<LoginPage> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF67548e),
+                      backgroundColor: Color(0xFF898AC4),
                     ),
                     onPressed: () {
                       loginUser();
                     },
                     child: Text(
-                      "Sign In",
+                      "Masuk",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -237,12 +239,12 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Don't have an acoount?"),
+                    Text("Belum punya akun?"),
                     TextButton(
                       onPressed: () {
                         context.push(RegisterPage());
                       },
-                      child: Text("Sign Up"),
+                      child: Text("Daftar"),
                     ),
                   ],
                 ),

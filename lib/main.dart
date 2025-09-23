@@ -1,6 +1,6 @@
 import 'package:attendance_project/navigator/bottom_nav.dart';
 import 'package:attendance_project/view/auth/login.dart';
-import 'package:attendance_project/view/widget/splashscreen.dart';
+import 'package:attendance_project/view/auth/splashscreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

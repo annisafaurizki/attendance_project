@@ -8,11 +8,12 @@ import 'package:attendance_project/model/register_model.dart';
 import 'package:attendance_project/share_preferences/share_preferences.dart';
 import 'package:attendance_project/utils/app_color.dart';
 import 'package:attendance_project/view/auth/login.dart';
+import 'package:attendance_project/view/widget/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+   RegisterPage({super.key});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -69,62 +70,78 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> registerUser() async {
-    final name = nameController.text.trim();
-    final email = emailController.text.trim();
-    final pass = passController.text.trim();
+  final name = nameController.text.trim();
+  final email = emailController.text.trim();
+  final pass = passController.text.trim();
 
-    if (name.isEmpty || email.isEmpty || pass.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Semua field wajib diisi")));
-      return;
-    }
-    PreferenceHandler.saveToken(user?.data.token.toString() ?? "");
-
-    if (selectedGender == null ||
-        selectedBatch == null ||
-        selectedTraining == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Pilih gender, batch, dan training")),
-      );
-      return;
-    }
-    if (pickedFile == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Foto profil belum dipilih")),
-      );
-      return;
-    }
-
-    setState(() {
-      isLoading = true;
-      errorMessage = null;
-    });
-
-    try {
-      Register result = await AuthenticationAPI.registerUser(
-        name: name,
-        email: email,
-        password: pass,
-        jenisKelamin: selectedGender!,
-        profilePhoto: File(pickedFile!.path),
-        batchId: selectedBatch!.id!,
-        trainingId: selectedTraining!.id!,
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(result.message ?? "Register berhasil")),
-      );
-      context.push(const LoginPage());
-    } catch (e) {
-      setState(() => errorMessage = e.toString());
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Gagal daftar: $errorMessage")));
-    } finally {
-      setState(() => isLoading = false);
-    }
+  // Validasi field kosong
+  if (name.isEmpty || email.isEmpty || pass.isEmpty) {
+    await showLottieDialog(
+      context: context,
+      asset: "assets/lottie/emptybox.json",
+      message: "Semua field wajib diisi",
+      onClose: () {},
+    );
+    return;
   }
+
+  if (selectedGender == null ||
+      selectedBatch == null ||
+      selectedTraining == null) {
+    await showLottieDialog(
+      context: context,
+      asset: "assets/lottie/emptybox.json",
+      message: "Pilih gender, batch, dan training",
+      onClose: () {},
+    );
+    return;
+  }
+
+  if (pickedFile == null) {
+    await showLottieDialog(
+      context: context,
+      asset: "assets/lottie/emptybox.json",
+      message: "Foto profil belum dipilih",
+      onClose: () {},
+    );
+    return;
+  }
+
+  setState(() {
+    isLoading = true;
+    errorMessage = null;
+  });
+
+  try {
+    Register result = await AuthenticationAPI.registerUser(
+      name: name,
+      email: email,
+      password: pass,
+      jenisKelamin: selectedGender!,
+      profilePhoto: File(pickedFile!.path),
+      batchId: selectedBatch!.id!,
+      trainingId: selectedTraining!.id!,
+    );
+    await showLottieDialog(
+      context: context,
+      asset: "assets/lottie/succes.json",
+      message: result.message ?? "Register berhasil",
+      onClose: () {
+        context.pushReplacement( LoginPage());
+      },
+    );
+  } catch (e) {
+    setState(() => errorMessage = e.toString());
+    await showLottieDialog(
+      context: context,
+      asset: "assets/lottie/failed(2).json",
+      message: "Gagal daftar: $errorMessage",
+      onClose: () {},
+    );
+  } finally {
+    setState(() => isLoading = false);
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -132,11 +149,11 @@ class _RegisterPageState extends State<RegisterPage> {
       backgroundColor: AttendanceColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          padding:  EdgeInsets.symmetric(horizontal: 24, vertical: 32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              /// Foto Profil
+              
               pickedFile != null
                   ? CircleAvatar(
                       radius: 50,
@@ -145,66 +162,66 @@ class _RegisterPageState extends State<RegisterPage> {
                   : CircleAvatar(
                       radius: 50,
                       backgroundColor: Colors.grey.shade300,
-                      child: const Icon(
+                      child:  Icon(
                         Icons.person,
                         size: 50,
-                        color: Color(0xFF67548e),
+                        color: Color(0xFF898AC4),
                       ),
                     ),
-              const SizedBox(height: 10),
+               SizedBox(height: 10),
               OutlinedButton.icon(
                 onPressed: pickFoto,
-                icon: const Icon(Icons.camera_alt, color: Colors.blueGrey),
-                label: const Text(
+                icon:  Icon(Icons.camera_alt, color: Colors.grey),
+                label:  Text(
                   "Pilih Foto Profil",
-                  style: TextStyle(color: Colors.blueGrey),
+                  style: TextStyle(color: Colors.grey),
                 ),
               ),
-              const SizedBox(height: 16),
+               SizedBox(height: 16),
 
-              /// Nama
+            
               TextField(
                 controller: nameController,
-                decoration: _inputDecoration("Your Name"),
+                decoration: _inputDecoration("Nama"),
               ),
-              const SizedBox(height: 16),
+               SizedBox(height: 16),
 
-              /// Email
+              
               TextField(
                 controller: emailController,
                 decoration: _inputDecoration("Email"),
               ),
-              const SizedBox(height: 16),
+               SizedBox(height: 16),
 
-              /// Password
+              
               TextField(
                 controller: passController,
                 obscureText: hidePassword,
-                decoration: _inputDecoration("Create Password").copyWith(
+                decoration: _inputDecoration("Buat Sandi").copyWith(
                   suffixIcon: IconButton(
                     icon: Icon(
                       hidePassword ? Icons.visibility_off : Icons.visibility,
-                      color: Color(0xFF67548e),
+                      color: Color(0xFF898AC4),
                     ),
                     onPressed: () =>
                         setState(() => hidePassword = !hidePassword),
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+               SizedBox(height: 16),
 
-              /// Gender
+            
               DropdownButtonFormField<String>(
                 value: selectedGender,
                 items: genderList
                     .map((g) => DropdownMenuItem(value: g, child: Text(g)))
                     .toList(),
                 onChanged: (val) => setState(() => selectedGender = val),
-                decoration: _inputDecoration("Choose Gender"),
+                decoration: _inputDecoration("Jenis Kelamin"),
               ),
-              const SizedBox(height: 16),
+               SizedBox(height: 16),
 
-              /// Batch (from API)
+              
               DropdownButtonFormField<batches>(
                 value: selectedBatch,
                 items: batchList
@@ -216,11 +233,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     )
                     .toList(),
                 onChanged: (val) => setState(() => selectedBatch = val),
-                decoration: _inputDecoration("Choose Batch"),
+                decoration: _inputDecoration("Pilih Batch"),
               ),
-              const SizedBox(height: 16),
+               SizedBox(height: 16),
 
-              /// Training (from API)
+              
               DropdownButtonFormField<Datum>(
                 value: selectedTraining,
                 items: trainingList
@@ -228,7 +245,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       (t) => DropdownMenuItem(
                         value: t,
                         child: SizedBox(
-                          width: 220, // atur sesuai kebutuhan
+                          width: 220, 
                           child: Text(
                             t.title ?? "Pelatihan ${t.id}",
                             overflow: TextOverflow.ellipsis,
@@ -239,47 +256,47 @@ class _RegisterPageState extends State<RegisterPage> {
                     )
                     .toList(),
                 onChanged: (val) => setState(() => selectedTraining = val),
-                decoration: _inputDecoration("Trainings"),
+                decoration: _inputDecoration("Kejuruan"),
               ),
 
-              const SizedBox(height: 32),
+               SizedBox(height: 32),
 
-              /// Tombol Daftar
+      
               ElevatedButton(
                 onPressed: isLoading ? null : registerUser,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF67548e),
-                  minimumSize: const Size(double.infinity, 50),
+                  backgroundColor: Color(0xFF898AC4),
+                  minimumSize:  Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 child: isLoading
-                    ? const CircularProgressIndicator(
+                    ?  CircularProgressIndicator(
                         strokeWidth: 2,
                         color: Colors.white,
                       )
                     : GestureDetector(
                         onTap: () => context.push(LoginPage()),
-                        child: const Text(
-                          "Create Account",
+                        child:  Text(
+                          "Buat Akun",
                           style: TextStyle(fontSize: 16, color: Colors.white),
                         ),
                       ),
               ),
-              const SizedBox(height: 16),
+               SizedBox(height: 16),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Already have an account?"),
-                  const SizedBox(width: 6),
+                   Text("Sudah punya akun?"),
+                   SizedBox(width: 6),
                   GestureDetector(
-                    onTap: () => context.push(const LoginPage()),
-                    child: const Text(
-                      "Sign In",
+                    onTap: () => context.push( LoginPage()),
+                    child:  Text(
+                      "Masuk",
                       style: TextStyle(
-                        color: Color(0xFF67548e),
+                        color: Color(0xFF898AC4),
                         fontWeight: FontWeight.bold,
                       ),
                     ),

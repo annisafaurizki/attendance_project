@@ -12,9 +12,10 @@ class BottomNavigator extends StatefulWidget {
 }
 
 class _BottomNavigatorState extends State<BottomNavigator> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   final List<Widget> _listWidget = const [
+    
     GoogleMapsScreen(),
     FirstPage(),
     ProfilePage(),

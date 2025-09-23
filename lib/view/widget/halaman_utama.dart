@@ -44,8 +44,8 @@ class _FirstPageState extends State<FirstPage> {
                 final profile = snapshot.data!.data;
 
                 return Container(
-                  padding: const EdgeInsets.all(16),
                   child: Row(
+                    
                     children: [
                       Container(
                         decoration: BoxDecoration(
@@ -87,6 +87,7 @@ class _FirstPageState extends State<FirstPage> {
                 );
               },
             ),
+            SizedBox(height: 20,),
 
             // ===== Stats Card =====
             FutureBuilder(

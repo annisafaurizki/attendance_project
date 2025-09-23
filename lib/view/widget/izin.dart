@@ -1,5 +1,9 @@
 import 'package:attendance_project/api/izin_service.dart'; // ganti sesuai path kamu
+import 'package:attendance_project/extension/navigator.dart';
+import 'package:attendance_project/navigator/bottom_nav.dart';
 import 'package:attendance_project/utils/app_color.dart';
+import 'package:attendance_project/view/widget/halaman_utama.dart';
+import 'package:attendance_project/view/widget/lottie.dart';
 import 'package:flutter/material.dart';
 
 class IzinPage extends StatefulWidget {
@@ -35,45 +39,51 @@ class _IzinPageState extends State<IzinPage> {
   }
 
   Future<void> _submitIzin() async {
-    if (!_formKey.currentState!.validate()) return;
-    if (_selectedDate == null || _tipeIzin == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Lengkapi tanggal & tipe izin"),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    setState(() => _isLoading = true);
-
-    try {
-      final izin = await IzinService.izinAbsen(
-        date: _selectedDate!.toIso8601String().split("T")[0],
-        alasanIzin: _alasanController.text.trim(),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(izin.message ?? "Izin berhasil dikirim"),
-          backgroundColor: Colors.green,
-        ),
-      );
-
-      setState(() {
-        _selectedDate = null;
-        _tipeIzin = null;
-        _alasanController.clear();
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Gagal: $e"), backgroundColor: Colors.red),
-      );
-    } finally {
-      setState(() => _isLoading = false);
-    }
+  if (!_formKey.currentState!.validate()) return;
+  if (_selectedDate == null || _tipeIzin == null) {
+    await showLottieDialog(
+      context: context,
+      asset: "assets/lottie/emptybox.json",
+      message: "Lengkapi tanggal & tipe izin",
+      autoClose: false, // 👈 khusus kalau field kosong
+      onClose: () {},
+    );
+    return;
   }
+
+  setState(() => _isLoading = true);
+
+  try {
+    final izin = await IzinService.izinAbsen(
+      date: _selectedDate!.toIso8601String().split("T")[0],
+      alasanIzin: _alasanController.text.trim(),
+    );
+
+    await showLottieDialog(
+      context: context,
+      asset: "assets/lottie/permissionSuccess.json",
+      message: izin.message ?? "Izin berhasil dikirim",
+      onClose: () {
+        setState(() {
+          _selectedDate = null;
+          _tipeIzin = null;
+          _alasanController.clear();
+        });
+        context.push(BottomNavigator());
+      },
+    );
+  } catch (e) {
+    await showLottieDialog(
+      context: context,
+      asset: "assets/lottie/permissionFail.json",
+      message: "Gagal: $e",
+      onClose: () {},
+    );
+  } finally {
+    setState(() => _isLoading = false);
+  }
+}
+
 
   @override
   void dispose() {
