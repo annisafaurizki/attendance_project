@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 
 class FirstPage extends StatefulWidget {
   const FirstPage({super.key});
+  static const id = "/first_page";
 
   @override
   State<FirstPage> createState() => _FirstPageState();
@@ -26,14 +27,14 @@ class _FirstPageState extends State<FirstPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 40),
+            SizedBox(height: 20),
 
             // ===== Profile Card =====
             FutureBuilder<GetProfileModel>(
               future: ProfileAPI.getProfile(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: SizedBox());
                 } else if (snapshot.hasError) {
                   return Center(child: Text("Error: ${snapshot.error}"));
                 } else if (!snapshot.hasData) {
@@ -49,7 +50,10 @@ class _FirstPageState extends State<FirstPage> {
                       Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(color: Colors.teal, width: 3),
+                          border: Border.all(
+                            color: Color(0xFF898AC4),
+                            width: 3,
+                          ),
                         ),
                         child: CircleAvatar(
                           radius: 28,
@@ -84,14 +88,12 @@ class _FirstPageState extends State<FirstPage> {
               },
             ),
 
-            SizedBox(height: 20),
-
             // ===== Stats Card =====
             FutureBuilder(
               future: StatsAPI.getStats(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: SizedBox());
                 }
                 if (snapshot.hasError) {
                   return Center(child: Text("Error: ${snapshot.error}"));
@@ -112,17 +114,41 @@ class _FirstPageState extends State<FirstPage> {
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               color: Colors.teal.shade100,
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.teal.shade200.withOpacity(0.5),
+                                  blurRadius: 8,
+                                  offset: const Offset(2, 4),
+                                ),
+                              ],
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text("Present"),
+                                Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.check_circle,
+                                      color: Colors.teal,
+                                      size: 20,
+                                    ),
+                                    SizedBox(width: 6),
+                                    Text(
+                                      "Present",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
                                 Text(
                                   (stats.totalMasuk ?? 0).toString(),
                                   style: const TextStyle(
-                                    fontSize: 28,
+                                    fontSize: 32,
                                     fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
                                   ),
                                 ),
                               ],
@@ -137,17 +163,41 @@ class _FirstPageState extends State<FirstPage> {
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               color: Colors.red.shade100,
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.red.shade200.withOpacity(0.5),
+                                  blurRadius: 8,
+                                  offset: const Offset(2, 4),
+                                ),
+                              ],
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text("Absent"),
+                                Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.event,
+                                      color: Colors.deepOrange,
+                                      size: 22,
+                                    ),
+                                    SizedBox(width: 6),
+                                    Text(
+                                      "Total Absen",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
                                 Text(
                                   (stats.totalAbsen ?? 0).toString(),
                                   style: const TextStyle(
-                                    fontSize: 28,
+                                    fontSize: 32,
                                     fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
                                   ),
                                 ),
                               ],
@@ -165,17 +215,43 @@ class _FirstPageState extends State<FirstPage> {
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               color: Colors.orange.shade100,
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.orange.shade200.withOpacity(
+                                    0.5,
+                                  ),
+                                  blurRadius: 8,
+                                  offset: const Offset(2, 4),
+                                ),
+                              ],
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text("Izin"),
+                                Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.pending_actions,
+                                      color: Colors.orange,
+                                      size: 20,
+                                    ),
+                                    SizedBox(width: 6),
+                                    Text(
+                                      "Izin",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
                                 Text(
                                   (stats.totalIzin ?? 0).toString(),
                                   style: const TextStyle(
-                                    fontSize: 28,
+                                    fontSize: 32,
                                     fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
                                   ),
                                 ),
                               ],
@@ -189,20 +265,44 @@ class _FirstPageState extends State<FirstPage> {
                           child: Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Colors.blue.shade100,
-                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.blue.shade50,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.blue.shade100.withOpacity(0.5),
+                                  blurRadius: 8,
+                                  offset: const Offset(2, 4),
+                                ),
+                              ],
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text("Status Hari Ini"),
+                                Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.today,
+                                      color: Colors.blue,
+                                      size: 20,
+                                    ),
+                                    SizedBox(width: 6),
+                                    Text(
+                                      "Status Hari Ini",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
                                 Text(
                                   stats.sudahAbsenHariIni == true
-                                      ? "Sudah Absen"
-                                      : "Belum Absen",
+                                      ? "✅ Sudah Absen"
+                                      : "❌ Belum Absen",
                                   style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
                                   ),
                                 ),
                               ],
@@ -211,25 +311,34 @@ class _FirstPageState extends State<FirstPage> {
                         ),
                       ],
                     ),
+                    SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Ada kendala hari ini?",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              context.push(IzinPage());
+                            },
+                            child: const Text(
+                              "Izin",
+                              style: TextStyle(fontWeight: FontWeight.w900),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 );
               },
-            ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Ada kendala hari ini?",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    context.push(IzinPage());
-                  },
-                  child: const Text("Izin"),
-                ),
-              ],
             ),
 
             // ===== Attendance History =====
@@ -264,14 +373,14 @@ class _FirstPageState extends State<FirstPage> {
                     Color badgeColor;
 
                     if (isIzin) {
-                      bgColor = Colors.orange.shade100;
-                      badgeColor = Colors.orange;
+                      bgColor = const Color(0xFFFFF8EC); // soft orange
+                      badgeColor = Colors.orange.shade400;
                     } else if (isAlpha) {
-                      bgColor = Colors.grey.shade300;
-                      badgeColor = Colors.grey;
+                      bgColor = Colors.grey.shade200; // abu muda
+                      badgeColor = Colors.grey.shade500;
                     } else {
-                      bgColor = Colors.teal.shade50;
-                      badgeColor = Colors.teal;
+                      bgColor = const Color(0xFFF0EAFB); // ungu lembut
+                      badgeColor = const Color(0xFF898AC4); // tetap ungu
                     }
 
                     return Container(

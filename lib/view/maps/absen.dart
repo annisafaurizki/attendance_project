@@ -5,6 +5,7 @@ import 'package:attendance_project/api/absen_check_in_service.dart';
 import 'package:attendance_project/model/absen_keluar_model.dart';
 import 'package:attendance_project/model/absen_model.dart';
 import 'package:attendance_project/utils/app_color.dart';
+import 'package:attendance_project/view/widget/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -55,7 +56,7 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
               margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AttendanceColors.background,
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(20),
                 ),
@@ -92,8 +93,6 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-
-                  /// Punch In & Punch Out
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [
@@ -132,7 +131,13 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
                     backgroundBorderRadius: BorderRadius.circular(10.0),
                     foregroundBorderRadius: BorderRadius.circular(10.0),
                     width: 300.0,
+
+                    // Warna track (latar belakang slider)
                     backgroundColor: AttendanceColors.pastelgrey,
+
+                    // Warna tombol/knob slider
+                    toggleColor: const Color(0xFF898AC4), // 🔴 knob merah
+
                     startChild: const Text('Check Out'),
                     endChild: const Text('Check In'),
                     icon: Padding(
@@ -142,15 +147,16 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
                         child: const Icon(
                           Icons.unfold_more_rounded,
                           size: 28.0,
+                          color: Colors.white, // warna icon dalam knob
                         ),
                       ),
                     ),
 
-                    /// 👉 Check Out
+                    // Action CheckOut
                     startAction: (controller) async {
                       controller.loading();
                       try {
-                        await _absenCheckOut(); // ✅ panggil API checkout
+                        await _absenCheckOut();
                         controller.success();
                       } catch (e) {
                         controller.failure();
@@ -159,11 +165,11 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
                       controller.reset();
                     },
 
-                    /// 👉 Check In
+                    // Action CheckIn
                     endAction: (controller) async {
                       controller.loading();
                       try {
-                        await _absenCheckIn(); // ✅ panggil API checkin
+                        await _absenCheckIn();
                         controller.success();
                       } catch (e) {
                         controller.failure();
@@ -263,21 +269,28 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
       if (!mounted) return;
 
       if (result != null && result.data != null) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text("✅ ${result.message}")));
+        await showLottieDialog(
+          context: context,
+          asset: "assets/lottie/checkin.json",
+          message: result.message ?? "Berhasil Check-In!",
+          onClose: () {},
+        );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("⚠️ ${result?.message ?? "Sudah absen hari ini"}"),
-          ),
+        await showLottieDialog(
+          context: context,
+          asset: "assets/lottie/checkFailed.json",
+          message: result?.message ?? "Sudah absen hari ini",
+          onClose: () {},
         );
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+      await showLottieDialog(
+        context: context,
+        asset: "assets/lottie/checkFailed.json",
+        message: "Error: $e",
+        onClose: () {},
+      );
     }
   }
 
@@ -313,19 +326,28 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
       if (!mounted) return;
 
       if (result.data != null) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text("✅ ${result.message}")));
+        await showLottieDialog(
+          context: context,
+          asset: "assets/lottie/checkin.json",
+          message: result.message ?? "Berhasil Check-Out!",
+          onClose: () {},
+        );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("⚠️ ${result.message ?? "Gagal check-out"}")),
+        await showLottieDialog(
+          context: context,
+          asset: "assets/lottie/checkFailed.json",
+          message: result.message ?? "Gagal Check-Out",
+          onClose: () {},
         );
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+      await showLottieDialog(
+        context: context,
+        asset: "assets/lottie/checkFailed.json",
+        message: "Error: $e",
+        onClose: () {},
+      );
     }
   }
 }

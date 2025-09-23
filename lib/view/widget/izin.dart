@@ -1,4 +1,5 @@
 import 'package:attendance_project/api/izin_service.dart'; // ganti sesuai path kamu
+import 'package:attendance_project/utils/app_color.dart';
 import 'package:flutter/material.dart';
 
 class IzinPage extends StatefulWidget {
@@ -83,20 +84,22 @@ class _IzinPageState extends State<IzinPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AttendanceColors.background,
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(25),
+        padding: const EdgeInsets.all(35),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 40),
               Row(
                 children: [
                   Container(
                     width: 50,
                     height: 50,
                     decoration: const BoxDecoration(
-                      color: Colors.teal,
+                      color: Color(0xFF67548e),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.edit_document, color: Colors.white),
@@ -158,7 +161,10 @@ class _IzinPageState extends State<IzinPage> {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.calendar_today, color: Colors.teal),
+                      const Icon(
+                        Icons.calendar_today,
+                        color: Color(0xFF67548e),
+                      ),
                       const SizedBox(width: 10),
                       Text(
                         _selectedDate == null
@@ -195,7 +201,7 @@ class _IzinPageState extends State<IzinPage> {
                 child: ElevatedButton(
                   onPressed: _isLoading ? null : _submitIzin,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal,
+                    backgroundColor: Color(0xFF67548e),
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),

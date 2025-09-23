@@ -1,4 +1,6 @@
-import 'package:attendance_project/view/widget/autochek.dart';
+import 'package:attendance_project/navigator/bottom_nav.dart';
+import 'package:attendance_project/view/auth/login.dart';
+import 'package:attendance_project/view/widget/splashscreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -31,7 +33,13 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: AuthCheckPage(),
+      initialRoute: SplashScreen.id,
+      routes: {
+        SplashScreen.id: (context) => SplashScreen(),
+        LoginPage.id: (context) => LoginPage(),
+        BottomNavigator.id: (context) => BottomNavigator(),
+      },
+      // home: AuthCheckPage(),
     );
   }
 }

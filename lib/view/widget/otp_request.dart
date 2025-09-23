@@ -1,6 +1,8 @@
 import 'package:attendance_project/api/otp_service.dart';
 import 'package:attendance_project/model/otp_model.dart';
+import 'package:attendance_project/utils/app_color.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class ForgotResetPasswordPage extends StatefulWidget {
   const ForgotResetPasswordPage({super.key});
@@ -80,7 +82,7 @@ class _ForgotResetPasswordPageState extends State<ForgotResetPasswordPage> {
       controller: controller,
       obscureText: obscure,
       decoration: InputDecoration(
-        prefixIcon: icon != null ? Icon(icon, color: Colors.blue) : null,
+        prefixIcon: icon != null ? Icon(icon, color: Color(0xFF898AC4)) : null,
         labelText: label,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
         filled: true,
@@ -103,7 +105,7 @@ class _ForgotResetPasswordPageState extends State<ForgotResetPasswordPage> {
   Widget _buildStepCircle(int step, {bool active = false}) {
     return CircleAvatar(
       radius: 18,
-      backgroundColor: active ? const Color(0xFF2563EB) : Colors.grey.shade300,
+      backgroundColor: active ? Color(0xFF898AC4) : Colors.grey.shade300,
       child: Text(
         '$step',
         style: TextStyle(
@@ -156,7 +158,7 @@ class _ForgotResetPasswordPageState extends State<ForgotResetPasswordPage> {
     return ElevatedButton(
       onPressed: _loading ? null : onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF2563EB),
+        backgroundColor: Color(0xFF898AC4),
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(vertical: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
@@ -178,40 +180,28 @@ class _ForgotResetPasswordPageState extends State<ForgotResetPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FB),
+      backgroundColor: AttendanceColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(height: 30),
               // ===== HEADER =====
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20, // disamakan dengan konten di bawah
-                  vertical: 20,
-                ),
-                decoration: const BoxDecoration(
-                  color: Color(0xFF3B82F6),
-                  borderRadius: BorderRadius.vertical(
-                    bottom: Radius.circular(24),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.lock_reset, color: Colors.white, size: 32),
-                    SizedBox(width: 12),
-                    Text(
-                      "Reset Password",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5,
-                      ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.lock_reset, color: Color(0xFF898AC4), size: 32),
+                  SizedBox(width: 12),
+                  Text(
+                    "Reset Password",
+                    style: TextStyle(
+                      color: Color(0xFF898AC4),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
 
               const SizedBox(height: 28),
@@ -219,6 +209,14 @@ class _ForgotResetPasswordPageState extends State<ForgotResetPasswordPage> {
               // ===== STEP =====
               _buildStepIndicator(),
               const SizedBox(height: 20),
+
+              Container(
+                height: 300,
+                width: double.infinity,
+                child: Lottie.asset("assets/lottie/otp.json"),
+              ),
+
+              SizedBox(height: 20),
 
               // ===== CARD FORM =====
               Padding(

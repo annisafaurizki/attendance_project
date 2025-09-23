@@ -91,7 +91,7 @@ class AuthenticationAPI {
     }
   }
 
-  static Future<LoginModel> loginUser({
+  static Future<RegisterUserModel> loginUser({
     required String email,
     required String password,
   }) async {
@@ -105,10 +105,22 @@ class AuthenticationAPI {
     print("Login Response: ${response.body}");
 
     if (response.statusCode == 200) {
-      return LoginModel.fromJson(json.decode(response.body));
+      final data = RegisterUserModel.fromJson(json.decode(response.body));
+      await PreferenceHandler.saveToken(data.data?.token ?? "");
+      await PreferenceHandler.saveLogin();
+
+      final userId = data.data?.user?.id;
+      if (userId != null) {
+        await PreferenceHandler.saveUserId(userId);
+        print("UserId saved: $userId");
+      } else {
+        print("UserId tidak ada di response");
+      }
+
+      return data;
     } else {
       final error = json.decode(response.body);
-      throw Exception(error["message"] ?? "Login gagal");
+      throw Exception(error["message"] ?? "Something went wrong");
     }
   }
 

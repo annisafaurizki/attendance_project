@@ -144,11 +144,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     )
                   : CircleAvatar(
                       radius: 50,
-                      backgroundColor: Colors.grey[200],
+                      backgroundColor: Colors.grey.shade300,
                       child: const Icon(
                         Icons.person,
                         size: 50,
-                        color: Colors.grey,
+                        color: Color(0xFF67548e),
                       ),
                     ),
               const SizedBox(height: 10),
@@ -184,7 +184,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   suffixIcon: IconButton(
                     icon: Icon(
                       hidePassword ? Icons.visibility_off : Icons.visibility,
-                      color: Colors.grey,
+                      color: Color(0xFF67548e),
                     ),
                     onPressed: () =>
                         setState(() => hidePassword = !hidePassword),
@@ -248,7 +248,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ElevatedButton(
                 onPressed: isLoading ? null : registerUser,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AttendanceColors.button,
+                  backgroundColor: Color(0xFF67548e),
                   minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -279,7 +279,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: const Text(
                       "Sign In",
                       style: TextStyle(
-                        color: AttendanceColors.button,
+                        color: Color(0xFF67548e),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -297,7 +297,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return InputDecoration(
       hintText: hint,
       filled: true,
-      fillColor: Colors.grey[100],
+      fillColor: AttendanceColors.background,
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(32)),
     );
   }

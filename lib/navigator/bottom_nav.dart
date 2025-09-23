@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class BottomNavigator extends StatefulWidget {
   const BottomNavigator({super.key});
-  static const String id = 'BottomNavigator';
+  static const String id = '/Bottom_Navigator';
   @override
   State<BottomNavigator> createState() => _BottomNavigatorState();
 }
@@ -16,7 +16,6 @@ class _BottomNavigatorState extends State<BottomNavigator> {
 
   final List<Widget> _listWidget = const [
     GoogleMapsScreen(),
-
     FirstPage(),
     ProfilePage(),
   ];

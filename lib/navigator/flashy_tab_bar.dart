@@ -1,6 +1,5 @@
 library;
 
-import 'package:attendance_project/utils/app_color.dart';
 import 'package:flutter/material.dart';
 
 /// A Widget that displays a Bottom Navigation Bar with smooth animation.
@@ -91,7 +90,7 @@ class FlashyTabBarItem {
   FlashyTabBarItem({
     required this.icon,
     required this.title,
-    this.activeColor = AttendanceColors.button,
+    this.activeColor = const Color(0xFF67548e),
     this.inactiveColor = Colors.black,
   });
 

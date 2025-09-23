@@ -1,6 +1,7 @@
 import 'package:attendance_project/api/profile_service.dart';
 import 'package:attendance_project/extension/navigator.dart';
 import 'package:attendance_project/model/profile_model.dart';
+import 'package:attendance_project/share_preferences/share_preferences.dart';
 import 'package:attendance_project/utils/app_color.dart';
 import 'package:attendance_project/view/auth/login.dart';
 import 'package:attendance_project/view/widget/otp_request.dart';
@@ -36,8 +37,8 @@ class _ProfilePageState extends State<ProfilePage> {
     return ListTile(
       leading: CircleAvatar(
         radius: 20,
-        backgroundColor: Colors.teal.withOpacity(0.15),
-        child: Icon(icon, color: Colors.teal),
+        backgroundColor: const Color(0xFF898AC4).withOpacity(0.15),
+        child: Icon(icon, color: const Color(0xFF898AC4)),
       ),
       title: Text(title, style: TextStyle(fontSize: 16)),
       trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
@@ -77,7 +78,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding: EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.teal, width: 3),
+                      border: Border.all(
+                        color: const Color(0xFF898AC4),
+                        width: 3,
+                      ),
                     ),
                     child: CircleAvatar(
                       radius: 50,
@@ -105,42 +109,73 @@ class _ProfilePageState extends State<ProfilePage> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: Text("Edit Name"),
-                            content: TextField(
-                              controller: controller,
-                              decoration: InputDecoration(
-                                labelText: "Name",
-                                border: OutlineInputBorder(),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                20,
+                              ), // sudut dialog melengkung
+                            ),
+                            title: const Text(
+                              "Edit Name",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
                               ),
                             ),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                TextField(
+                                  controller: controller,
+                                  decoration: InputDecoration(
+                                    labelText: "Name",
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                        color: Color(0xFF67548e),
+                                        width: 2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 14,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            actionsPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
                             actions: [
-                              TextButton(
+                              OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  side: const BorderSide(color: Colors.grey),
+                                ),
                                 onPressed: () => Navigator.pop(context),
-                                child: Text("Batal"),
+                                child: const Text("Batal"),
                               ),
                               ElevatedButton(
-                                onPressed: () async {
-                                  try {
-                                    await ProfileAPI.updateProfile(
-                                      name: controller.text,
-                                    );
-                                    Navigator.pop(context);
-                                    _refreshProfile();
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          "Nama berhasil diperbarui",
-                                        ),
-                                      ),
-                                    );
-                                  } catch (e) {
-                                    Navigator.pop(context);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text("Gagal update: $e"),
-                                      ),
-                                    );
-                                  }
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color(0xFF67548e),
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 12,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  // Simpan nama
+                                  Navigator.pop(context);
                                 },
                                 child: const Text("Simpan"),
                               ),
@@ -169,7 +204,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         context: context,
                         applicationName: "Attendance Project",
                         applicationVersion: "1.0.0",
-                        applicationLegalese: "© 2025 Attendance App",
+                        applicationLegalese: "© PPKD JAKARTA PUSAT",
                       );
                     },
                   ),
@@ -181,14 +216,17 @@ class _ProfilePageState extends State<ProfilePage> {
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.teal,
+                        backgroundColor: const Color(0xFF898AC4),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       onPressed: () {
-                        context.pushReplacement(LoginPage());
+                        PreferenceHandler.removeToken();
+                        PreferenceHandler.removeLogin();
+
+                        context.pushReplacement(const LoginPage());
                       },
                       icon: Icon(Icons.logout, color: Colors.white),
                       label: Text(
