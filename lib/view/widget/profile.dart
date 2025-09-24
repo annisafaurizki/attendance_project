@@ -25,46 +25,44 @@ class _ProfilePageState extends State<ProfilePage> {
   File? _selectedImage;
   bool _isUploading = false;
 
-Future<void> _pickAndUploadImage() async {
-  final picker = ImagePicker();
-  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  Future<void> _pickAndUploadImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-  if (pickedFile != null) {
-    setState(() {
-      _selectedImage = File(pickedFile.path);
-      _isUploading = true;
-    });
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+        _isUploading = true;
+      });
 
-    try {
-      final result = await PhotoAPI.updatePhotoProfile(profilePhoto: _selectedImage!);
-      await showLottieDialog(
-        context: context,
-        asset: "assets/lottie/succes.json",
-        message: result.message ?? "Foto berhasil diubah",
-        onClose: () {
-          _refreshProfile();
-        },
-      );
-
-    } catch (e) {
-      await showLottieDialog(
-        context: context,
-        asset: "assets/lottie/Fail (1).json",
-        message: "Gagal ubah foto: $e",
-        onClose: () {},
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isUploading = false;
-        });
+      try {
+        final result = await PhotoAPI.updatePhotoProfile(
+          profilePhoto: _selectedImage!,
+        );
+        await showLottieDialog(
+          context: context,
+          asset: "assets/lottie/succes.json",
+          message: result.message ?? "Foto berhasil diubah",
+          onClose: () {
+            _refreshProfile();
+          },
+        );
+      } catch (e) {
+        await showLottieDialog(
+          context: context,
+          asset: "assets/lottie/Fail (1).json",
+          message: "Gagal ubah foto: $e",
+          onClose: () {},
+        );
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isUploading = false;
+          });
+        }
       }
     }
   }
-}
-
-
-  
 
   @override
   void initState() {
@@ -77,8 +75,6 @@ Future<void> _pickAndUploadImage() async {
       _profileFuture = ProfileAPI.getProfile();
     });
   }
-
-  
 
   Widget _buildMenuItem({
     required IconData icon,
@@ -96,8 +92,6 @@ Future<void> _pickAndUploadImage() async {
       onTap: onTap,
     );
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -128,53 +122,61 @@ Future<void> _pickAndUploadImage() async {
                   ),
                   SizedBox(height: 20),
                   Stack(
-  children: [
-    Container(
-      padding: EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: const Color(0xFF898AC4),
-          width: 3,
-        ),
-      ),
-      child: CircleAvatar(
-        radius: 50,
-        backgroundImage: _selectedImage != null
-            ? FileImage(_selectedImage!)
-            : NetworkImage(profile.profilePhotoUrl) as ImageProvider,
-      ),
-    ),
-    Positioned(
-      bottom: 0,
-      right: 0,
-      child: InkWell(
-        onTap: _isUploading ? null : _pickAndUploadImage,
-        child: Container(
-          padding: EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white,
-            border: Border.all(color: Colors.grey, width: 1),
-          ),
-          child: Icon(Icons.camera_alt, size: 20, color: Colors.grey[800]),
-        ),
-      ),
-    ),
-    if (_isUploading)
-      Positioned.fill(
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.3),
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-          ),
-        ),
-      ),
-  ],
-),
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: const Color(0xFF898AC4),
+                            width: 3,
+                          ),
+                        ),
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundImage: _selectedImage != null
+                              ? FileImage(_selectedImage!)
+                              : NetworkImage(profile.profilePhotoUrl)
+                                    as ImageProvider,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: InkWell(
+                          onTap: _isUploading ? null : _pickAndUploadImage,
+                          child: Container(
+                            padding: EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            child: Icon(
+                              Icons.camera_alt,
+                              size: 20,
+                              color: Colors.grey[800],
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (_isUploading)
+                        Positioned.fill(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.3),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
 
                   const SizedBox(height: 12),
                   Text(
@@ -182,7 +184,7 @@ Future<void> _pickAndUploadImage() async {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    profile.trainingTitle,
+                    profile.email,
                     style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                   SizedBox(height: 30),
@@ -250,7 +252,7 @@ Future<void> _pickAndUploadImage() async {
                                 child: const Text("Batal"),
                               ),
                               ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
+                                style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF67548e),
                                   foregroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
@@ -266,16 +268,20 @@ Future<void> _pickAndUploadImage() async {
                                   if (newName.isEmpty) return;
 
                                   try {
-                                    final result = await ProfileAPI.updateProfile(name: newName);
+                                    final result =
+                                        await ProfileAPI.updateProfile(
+                                          name: newName,
+                                        );
 
-                                    
                                     showDialog(
                                       context: context,
                                       barrierDismissible: false,
                                       builder: (context) {
                                         return AlertDialog(
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(20),
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ),
                                           ),
                                           content: Column(
                                             mainAxisSize: MainAxisSize.min,
@@ -288,9 +294,12 @@ Future<void> _pickAndUploadImage() async {
                                               ),
                                               const SizedBox(height: 16),
                                               Text(
-                                                result.message ?? "Nama berhasil diubah",
+                                                result.message ??
+                                                    "Nama berhasil diubah",
                                                 textAlign: TextAlign.center,
-                                                style: const TextStyle(fontSize: 16),
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -298,22 +307,24 @@ Future<void> _pickAndUploadImage() async {
                                       },
                                     );
 
-                                  
-                                    Future.delayed(const Duration(seconds: 2), () {
-                                      context.pop(context); 
-                                      context.pop(context); 
-                                      _refreshProfile();      
-                                    });
-
+                                    Future.delayed(
+                                      const Duration(seconds: 2),
+                                      () {
+                                        context.pop(context);
+                                        context.pop(context);
+                                        _refreshProfile();
+                                      },
+                                    );
                                   } catch (e) {
-                                    
                                     showDialog(
                                       context: context,
                                       barrierDismissible: false,
                                       builder: (context) {
                                         return AlertDialog(
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(20),
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ),
                                           ),
                                           content: Column(
                                             mainAxisSize: MainAxisSize.min,
@@ -328,7 +339,10 @@ Future<void> _pickAndUploadImage() async {
                                               Text(
                                                 "Gagal ubah nama: $e",
                                                 textAlign: TextAlign.center,
-                                                style: const TextStyle(fontSize: 14, color: Colors.red),
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.red,
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -337,15 +351,16 @@ Future<void> _pickAndUploadImage() async {
                                     );
 
                                     // ⏳ Tutup dialog otomatis setelah 2 detik
-                                    Future.delayed(const Duration(seconds: 2), () {
-                                      Navigator.pop(context);
-                                    });
+                                    Future.delayed(
+                                      const Duration(seconds: 2),
+                                      () {
+                                        Navigator.pop(context);
+                                      },
+                                    );
                                   }
                                 },
                                 child: const Text("Simpan"),
-                              )
-
-
+                              ),
                             ],
                           );
                         },
@@ -364,48 +379,51 @@ Future<void> _pickAndUploadImage() async {
                   const Divider(),
 
                   _buildMenuItem(
-  icon: Icons.info,
-  title: "Tentang Aplikasi",
-  onTap: () {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: const Text(
-            "Slide In",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
-                "Attendance Project",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Text("Versi 1.0.0"),
-              SizedBox(height: 12),
-              Text(
-                "Aplikasi ini dibuat oleh Annisa Faurizki untuk "
-                "mempermudah pencatatan absensi dan monitoring statistik.",
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Tutup"),
-            ),
-          ],
-        );
-      },
-    );
-  },
-),
+                    icon: Icons.info,
+                    title: "Tentang Aplikasi",
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            title: const Text(
+                              "Slide In",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  "Attendance Project",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text("Versi 1.0.0"),
+                                SizedBox(height: 12),
+                                Text(
+                                  "Aplikasi ini dibuat oleh Annisa Faurizki untuk "
+                                  "mempermudah pencatatan absensi dan monitoring statistik.",
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text("Tutup"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
 
                   Divider(),
 
