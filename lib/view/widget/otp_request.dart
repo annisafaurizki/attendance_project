@@ -1,6 +1,7 @@
 import 'package:attendance_project/api/otp_service.dart';
 import 'package:attendance_project/model/otp_model.dart';
 import 'package:attendance_project/utils/app_color.dart';
+import 'package:attendance_project/view/widget/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -205,7 +206,16 @@ class _ForgotResetPasswordPageState extends State<ForgotResetPasswordPage> {
               // ===== HEADER =====
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProfilePage()),
+                      );
+                    },
+                    icon: Icon(Icons.arrow_back_ios),
+                  ),
                   Icon(Icons.lock_reset, color: Color(0xFF898AC4), size: 32),
                   SizedBox(width: 12),
                   Text(
