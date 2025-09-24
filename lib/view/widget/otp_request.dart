@@ -17,6 +17,7 @@ class _ForgotResetPasswordPageState extends State<ForgotResetPasswordPage> {
   final TextEditingController _otpController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  bool isVisibility = false;
   bool _loading = false;
   bool _otpSent = false;
   String? _message;
@@ -77,16 +78,29 @@ class _ForgotResetPasswordPageState extends State<ForgotResetPasswordPage> {
     String label, {
     bool obscure = false,
     IconData? icon,
+    bool isPassword = false,
   }) {
     return TextField(
       controller: controller,
-      obscureText: obscure,
+      obscureText: isPassword ? !isVisibility : false,
       decoration: InputDecoration(
         prefixIcon: icon != null ? Icon(icon, color: Color(0xFF898AC4)) : null,
         labelText: label,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
         filled: true,
         fillColor: Colors.grey.shade50,
+        suffixIcon: isPassword
+            ? IconButton(
+                onPressed: () {
+                  setState(() {
+                    isVisibility = !isVisibility;
+                  });
+                },
+                icon: Icon(
+                  isVisibility ? Icons.visibility : Icons.visibility_off,
+                ),
+              )
+            : null,
       ),
     );
   }
@@ -147,7 +161,9 @@ class _ForgotResetPasswordPageState extends State<ForgotResetPasswordPage> {
           'Password Baru',
           obscure: true,
           icon: Icons.lock_outline,
+          isPassword: true,
         ),
+
         const SizedBox(height: 24),
         _buildMainButton('Reset Password', _resetPassword),
       ],
