@@ -49,7 +49,6 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
             onMapCreated: (controller) => mapController = controller,
           ),
 
-          
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -136,7 +135,7 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
                     backgroundColor: AttendanceColors.pastelgrey,
 
                     // Warna tombol/knob slider
-                    toggleColor: const Color(0xFF898AC4), // 🔴 knob merah
+                    toggleColor: const Color(0xFF898AC4),
 
                     startChild: const Text('Check Out'),
                     endChild: const Text('Check In'),
