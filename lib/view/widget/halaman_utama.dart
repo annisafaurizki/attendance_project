@@ -5,6 +5,7 @@ import 'package:attendance_project/extension/navigator.dart';
 import 'package:attendance_project/model/history_model.dart';
 import 'package:attendance_project/model/profile_model.dart';
 import 'package:attendance_project/utils/app_color.dart';
+import 'package:attendance_project/view/widget/detail_history.dart';
 import 'package:attendance_project/view/widget/izin.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -45,7 +46,6 @@ class _FirstPageState extends State<FirstPage> {
 
                 return Container(
                   child: Row(
-                    
                     children: [
                       Container(
                         decoration: BoxDecoration(
@@ -87,7 +87,7 @@ class _FirstPageState extends State<FirstPage> {
                 );
               },
             ),
-            SizedBox(height: 20,),
+            SizedBox(height: 20),
 
             // ===== Stats Card =====
             FutureBuilder(
@@ -136,7 +136,7 @@ class _FirstPageState extends State<FirstPage> {
                                     ),
                                     SizedBox(width: 6),
                                     Text(
-                                      "Present",
+                                      "Hadir",
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -384,105 +384,113 @@ class _FirstPageState extends State<FirstPage> {
                       badgeColor = const Color(0xFF898AC4); // tetap ungu
                     }
 
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: bgColor,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Kotak tanggal kiri
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              color: badgeColor,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  DateFormat('dd').format(date),
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  DateFormat('EEE').format(date).toUpperCase(),
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-
-                          // Isi konten
-                          Expanded(
-                            child: isIzin
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Izin",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                          color: Colors.orange,
-                                        ),
-                                      ),
-                                      Text(
-                                        history.alasanIzin ??
-                                            "Tanpa keterangan",
-                                      ),
-                                    ],
-                                  )
-                                : isAlpha
-                                ? const Text(
-                                    "Tidak hadir (Alpha)",
-                                    style: TextStyle(
+                    return GestureDetector(
+                      onTap: () {
+                        // Navigasi ke halaman detail, bawa data history dan warna
+                        context.push(HistoryDetailPage(history: history));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: bgColor,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // Kotak tanggal kiri
+                            Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: badgeColor,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    DateFormat('dd').format(date),
+                                    style: const TextStyle(
+                                      fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black54,
+                                      color: Colors.white,
                                     ),
-                                  )
-                                : Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        children: [
-                                          const Text(
-                                            "Check In",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                          Text(history.checkInTime ?? "-"),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          const Text(
-                                            "Check Out",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                          Text(history.checkOutTime ?? "-"),
-                                        ],
-                                      ),
-                                    ],
                                   ),
-                          ),
-                        ],
+                                  Text(
+                                    DateFormat(
+                                      'EEE',
+                                    ).format(date).toUpperCase(),
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+
+                            // Isi konten
+                            Expanded(
+                              child: isIzin
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Izin",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: Colors.orange,
+                                          ),
+                                        ),
+                                        Text(
+                                          history.alasanIzin ??
+                                              "Tanpa keterangan",
+                                        ),
+                                      ],
+                                    )
+                                  : isAlpha
+                                  ? const Text(
+                                      "Tidak hadir (Alpha)",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54,
+                                      ),
+                                    )
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          children: [
+                                            const Text(
+                                              "Check In",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            Text(history.checkInTime ?? "-"),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            const Text(
+                                              "Check Out",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            Text(history.checkOutTime ?? "-"),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
