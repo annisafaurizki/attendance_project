@@ -1,4 +1,4 @@
-package com.example.attendance_project
+package com.ppkd.slidein
 
 import io.flutter.embedding.android.FlutterActivity
 
